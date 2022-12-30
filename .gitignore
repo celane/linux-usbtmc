@@ -55,3 +55,6 @@ Mkfile.old
 .cache.mk
 # test programme
 ttmc
+
+# packages
+*.rpm
