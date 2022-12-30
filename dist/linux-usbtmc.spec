@@ -39,7 +39,7 @@ sed -i -e 's/__VERSION_STRING/%{version}/g' dkms.conf
 %install
 
 install -d %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
-cp -Rfp . %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
+cp *.c *.h Makefile  %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
 install -p -m 0644 dkms.conf %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
 
 
