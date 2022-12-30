@@ -39,7 +39,9 @@ sed -i -e 's/__VERSION_STRING/%{version}/g' dkms.conf
 %install
 
 install -d %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
-cp usbtmc.c tmc.h Makefile  %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
+install -p -m 0644 usbtmc.c %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
+install -p -m 0644 tmc.h %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
+install -p -m 0644 Makefile.dkms %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}/Makefile
 install -p -m 0644 dkms.conf %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
 
 
