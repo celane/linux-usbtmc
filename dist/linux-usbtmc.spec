@@ -6,7 +6,7 @@
 #
 Name:           linux-usbtmc
 Version:        1.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        USBTMC driver (GPIB over USB)
 
 License:        GPL
@@ -43,16 +43,24 @@ install -p -m 0644 usbtmc.c %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
 install -p -m 0644 tmc.h %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
 install -p -m 0644 Makefile.dkms %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}/Makefile
 install -p -m 0644 dkms.conf %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
-
+install -d %{buildroot}%{_sysconfdir}/udev/rules.d
+install -p -m 0644 99-usbtmc.rules  %{buildroot}%{_sysconfdir}/udev/rules.d/
 
 
 %files
+%defattr(644,root,root)
 %license LICENSE
 %doc COPYING README.md
 %dir %{_usrsrc}/%{name}-%{version}-%{release}
 %{_usrsrc}/%{name}-%{version}-%{release}/*
+%config(noreplace) %{_sysconfdir}/udev/rules.d/99-usbtmc.rules
 
 %post
+if ! getent group usbtmc ; then
+groupadd usbtmc
+fi
+udevadm control --reload
+
 dkms add -m %{name} -v %{version}-%{release} -q --rpm_safe_upgrade || :
 # Rebuild and make available for the currently running kernel
 dkms build -m %{name} -v %{version}-%{release} -q || :
