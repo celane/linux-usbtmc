@@ -50,7 +50,7 @@ install -p -m 0644 99-usbtmc.rules  %{buildroot}%{_sysconfdir}/udev/rules.d/
 %files
 %defattr(644,root,root)
 %license LICENSE
-%doc COPYING README.md
+%doc COPYING README.md ttmc.c tmc.h
 %dir %{_usrsrc}/%{name}-%{version}-%{release}
 %{_usrsrc}/%{name}-%{version}-%{release}/*
 %config(noreplace) %{_sysconfdir}/udev/rules.d/99-usbtmc.rules
