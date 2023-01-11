@@ -6,7 +6,7 @@
 #
 Name:           linux-usbtmc
 Version:        1.4
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        USBTMC driver (GPIB over USB)
 
 License:        GPL
@@ -44,8 +44,8 @@ install -p -m 0644 tmc.h %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
 install -p -m 0644 Makefile.dkms %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}/Makefile
 install -p -m 0644 dkms.conf %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
 install -d %{buildroot}%{_sysconfdir}/udev/rules.d
-install -p -m 0644 99-usbtmc.rules  %{buildroot}%{_sysconfdir}/udev/rules.d/
-
+install -p -m 0644 70-usbtmc.rules  %{buildroot}%{_sysconfdir}/udev/rules.d/
+install -p -m 0644 is_usbtmc_parent %{buildroot}%{_sysconfidr}/udev/
 
 %files
 %defattr(644,root,root)
@@ -53,7 +53,8 @@ install -p -m 0644 99-usbtmc.rules  %{buildroot}%{_sysconfdir}/udev/rules.d/
 %doc COPYING README.md ttmc.c tmc.h
 %dir %{_usrsrc}/%{name}-%{version}-%{release}
 %{_usrsrc}/%{name}-%{version}-%{release}/*
-%config(noreplace) %{_sysconfdir}/udev/rules.d/99-usbtmc.rules
+%config(noreplace) %{_sysconfdir}/udev/rules.d/70-usbtmc.rules
+%config(noreplace) %{_sysconfdir}/udev/is_usbtmc_parent
 
 %post
 if ! getent group usbtmc ; then
@@ -72,6 +73,9 @@ dkms install -m %{name} -v %{version}-%{release} -q --force || :
 dkms remove -m %{name} -v %{version}-%{release} -q --all --rpm_safe_upgrade || :
 
 %changelog
+* Wed Jan 11 2023 lane@dchooz.org
+- update udev setup for usbtmc devices
+
 * Fri Dec 30 2022 lane@dchooz.org
 - initial version
 
