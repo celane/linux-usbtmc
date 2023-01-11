@@ -1,0 +1,32 @@
+# permissions for usbtmc:
+# First option:
+#   TAG+="uaccess" is for giving 'current user/seat' access,
+#   handled by /usr/lib/udev/rules.d/73-seat-late.rules, so
+#   need to have this file named earlier to run first, to make it work. 
+# Second option:
+#   use GROUP="usbtmc", and give group membership as needed.
+#   Note that "uaccess" is really only useful for 'interactive' use,
+#   while GROUP="usbtmc" is needed for non-interactive use.
+#   Also note: group "usbtmc" should be defined in /etc/group, rather
+#   than LDAP/yp/etc, otherwise errors could show up while booting.
+#
+# What gets permissions:
+#  /dev/usbtmc* devices
+# but ALSO
+#   /dev/bus/usb/nnn/mmm  for ioctl operations. This
+# one is trickier, since /dev/bus/usb/nnn/mmm are not 'usbtmc'
+# devices, and don't have a 'usbtmc' device as a 'parent' in the
+# udev structure, but rather have a 'usbtmc' device as a 'child'.
+# So use script "/etc/udev/is_usbtmc_parent" to check if a child
+# device is a usbtmc device, and set permissions. 
+
+####### uaccess permission rules #######
+
+KERNEL=="usbtmc[0-9]*", SUBSYSTEMS=="usb", TAG+="uaccess"
+SUBSYSTEM=="usb", PROGRAM=="/etc/udev/is_usbtmc_parent", TAG+="uaccess"
+
+####### group usbtmc permission rules #####
+
+KERNEL=="usbtmc[0-9]*", SUBSYSTEMS=="usb", MODE="0660", GROUP="usbtmc"
+SUBSYSTEM=="usb", PROGRAM=="/etc/udev/is_usbtmc_parent", GROUP="usbtmc", MODE="0664"
+

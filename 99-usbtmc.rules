@@ -1,2 +1,0 @@
-# set permissions on usbtmc devices
-KERNEL=="usbtmc[0-9]*", MODE="0660", GROUP="usbtmc"

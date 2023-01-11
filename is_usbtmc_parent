@@ -1,0 +1,39 @@
+#!/usr/bin/perl
+# find if usb device is 'parent' to a usbtmc device
+# returns 'true' (exit 0) if so
+
+# Assumes that usb device is something like:
+#    (stuff)/usb1/1-3
+# and that the child device is something like:
+#    (stuff)/usb1/1-3/1-3:2.4
+# identified as a usbtmc device by having "DRIVER=usbtmc" in its uevent file.
+#
+
+# There might be a more elegant solution using udevadm, but didn't find it.
+
+# debugging print statments commented out
+$devpath=$ENV{'DEVPATH'};
+# $devpath=shift;  # test with command line parameter
+# print "devpath = $devpath\n";
+exit 1 unless $devpath =~ /\/usb\d+\/(\d+\-\d+)$/;
+my $tag  = $1;
+# print "got usb devpath tag $tag\n";
+
+open(X,"find /sys${devpath} -maxdepth 2 -mindepth 2 -name uevent|") || die "find problem";
+while (<X>) {
+    chomp;
+    next unless /$tag\/$tag:\d+\.\d+\/uevent/;
+    #print "uevent file $_\n";
+    $uev = $_;
+    open(Y,"<$uev") || die "error opening $uev";
+    while (<Y>) {
+        chomp;
+        next unless /^DRIVER=usbtmc\s*$/;
+        #print "got usbtmc child device\n";
+        exit 0;
+    }
+    close(Y);
+}
+close(X);
+    
+exit 1;
