@@ -45,7 +45,7 @@ install -p -m 0644 Makefile.dkms %{buildroot}%{_usrsrc}/%{name}-%{version}-%{rel
 install -p -m 0644 dkms.conf %{buildroot}%{_usrsrc}/%{name}-%{version}-%{release}
 install -d %{buildroot}%{_sysconfdir}/udev/rules.d
 install -p -m 0644 70-usbtmc.rules  %{buildroot}%{_sysconfdir}/udev/rules.d/
-install -p -m 0644 is_usbtmc_parent %{buildroot}%{_sysconfidr}/udev/
+install -p -m 0644 is_usbtmc_parent %{buildroot}%{_sysconfdir}/udev/
 
 %files
 %defattr(644,root,root)
