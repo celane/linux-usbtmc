@@ -54,7 +54,7 @@ install -p -m 0644 is_usbtmc_parent %{buildroot}%{_sysconfdir}/udev/
 %dir %{_usrsrc}/%{name}-%{version}-%{release}
 %{_usrsrc}/%{name}-%{version}-%{release}/*
 %config(noreplace) %{_sysconfdir}/udev/rules.d/70-usbtmc.rules
-%config(noreplace) %{_sysconfdir}/udev/is_usbtmc_parent
+%config(noreplace) %attr(744,root,root) %{_sysconfdir}/udev/is_usbtmc_parent
 
 %post
 if ! getent group usbtmc ; then

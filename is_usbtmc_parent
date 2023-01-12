@@ -10,30 +10,33 @@
 #
 
 # There might be a more elegant solution using udevadm, but didn't find it.
+my $DEBUG = 0;
+open(D,">>/var/log/usbtmc.log") if $DEBUG;
 
-# debugging print statments commented out
 $devpath=$ENV{'DEVPATH'};
-# $devpath=shift;  # test with command line parameter
-# print "devpath = $devpath\n";
+$devpath=shift if $DEBUG && !defined($devpath);
+
+print D "devpath = $devpath\n" if $DEBUG;
+
 exit 1 unless $devpath =~ /\/usb\d+\/(\d+\-\d+)$/;
 my $tag  = $1;
-# print "got usb devpath tag $tag\n";
+print D "got usb devpath tag $tag\n"  if $DEBUG;
 
 open(X,"find /sys${devpath} -maxdepth 2 -mindepth 2 -name uevent|") || die "find problem";
 while (<X>) {
     chomp;
     next unless /$tag\/$tag:\d+\.\d+\/uevent/;
-    #print "uevent file $_\n";
+    print D "uevent file $_\n" if $DEBUG;
     $uev = $_;
     open(Y,"<$uev") || die "error opening $uev";
     while (<Y>) {
         chomp;
         next unless /^DRIVER=usbtmc\s*$/;
-        #print "got usbtmc child device\n";
+        print D "got usbtmc child device\n" if $DEBUG;
         exit 0;
     }
     close(Y);
 }
 close(X);
-    
+print D "not a usbtmc parent device\n" if $DEBUG;
 exit 1;

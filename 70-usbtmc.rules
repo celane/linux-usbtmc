@@ -23,10 +23,10 @@
 ####### uaccess permission rules #######
 
 KERNEL=="usbtmc[0-9]*", SUBSYSTEMS=="usb", TAG+="uaccess"
-SUBSYSTEM=="usb", PROGRAM=="/etc/udev/is_usbtmc_parent", TAG+="uaccess"
+ACTION=="add", SUBSYSTEM=="usb", PROGRAM=="/etc/udev/is_usbtmc_parent", TAG+="uaccess"
 
 ####### group usbtmc permission rules #####
 
 KERNEL=="usbtmc[0-9]*", SUBSYSTEMS=="usb", MODE="0660", GROUP="usbtmc"
-SUBSYSTEM=="usb", PROGRAM=="/etc/udev/is_usbtmc_parent", GROUP="usbtmc", MODE="0664"
+ACTION=="add", SUBSYSTEM=="usb", PROGRAM=="/etc/udev/is_usbtmc_parent", GROUP="usbtmc", MODE="0664"
 
